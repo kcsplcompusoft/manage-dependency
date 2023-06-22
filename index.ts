@@ -74,16 +74,19 @@ const generatePR = (authToken: string) => {
 if (repo_tool !== "" && default_branch !== "" && remote !== "" && url !== "") {
 
     // get auth token from user with the use of inquirer
-    inquirer
-        .prompt([
+    (async () => {
+        try {
+          const answers = await inquirer.prompt([
             {
-                name: 'authToken',
-                message: 'Please Enter your personal access token',
-            }
-        ])
-        .then(answers => {
-            generatePR(answers.authToken)
-        });
+              name: 'authToken',
+              message: 'Please enter your personal access token',
+            },
+          ]);
+          generatePR(answers.authToken);
+        } catch (error) {
+          console.error('Error occurred:', error);
+        }
+      })();
 }
 else {
     console.error("no repository found")
